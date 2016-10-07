@@ -21,7 +21,6 @@ DECLARE @Id_Programacion INT
 , @CoordinacionVM VARCHAR(5)
 , @MotricidadG VARCHAR(5)
 , @LenguajeEE VARCHAR(5)
-
 , @ContadoEval INT
 
 SELECT @SolicitudAdmision = prl.Descripcion , @AnioAdmision = prl.Id FROM dbo.PeriodoLectivo prl WHERE prl.AnioAdmision = 1
@@ -265,14 +264,16 @@ SELECT 'RESUMEN DE RESULTADOS DE EVALUACIÓN DE ASPIRANTES' AS Evento
 , IIF (ResA.ResultadoEvaluacionCNJ = 0 OR  ResA.ResultadoEvaluacionCNJ IS NULL, 0 , 1 ) 
 + IIF (ResA.ResultadoEvaluacionJFC = 0 OR ResA.ResultadoEvaluacionJFC IS NULL, 0 , 1) 
 + IIF (ResA.ResultadoEvaluacionREC = 0 OR ResA.ResultadoEvaluacionREC IS NULL, 0 , 1) 
-+ IIF (ResA.ResultadoEvaluacionVRC = 0 OR ResA.ResultadoEvaluacionVRC IS NULL, 0 , 1) AS SumaEval
++ IIF (ResA.ResultadoEvaluacionVRC = 0 OR ResA.ResultadoEvaluacionVRC IS NULL, 0 , 1) 
++ IIF ((ResA.ResultadoEvaluacionCOP IS NULL OR ResA.ResultadoEvaluacionCOP = 0) AND (ResA.ResultadoEvaluacionCOM IS NULL OR ResA.ResultadoEvaluacionCOM = 0), 0, 1 )
+AS SumaEval
 , ResA.ResultadoEvaluacionCNJ AS CNJ
 , ResA.ResultadoEvaluacionJFC AS JFC
 , ResA.ResultadoEvaluacionREC AS REC
 , ResA.ResultadoEvaluacionVRC AS VRC
 , ResA.ResultadoEvaluacionCOP AS COP
 , ResA.ResultadoEvaluacionCOM AS COM
-, Suma AS SUMA
+, FORMAT (IIF (ResA.ResultadoEvaluacionCOP = 0 OR ResA.ResultadoEvaluacionCOP IS NULL, ResA.ResultadoEvaluacionCOM, IIF (ResA.ResultadoEvaluacionCOM = 0 OR ResA.ResultadoEvaluacionCOM IS NULL, ResA.ResultadoEvaluacionCOP, (ResA.ResultadoEvaluacionCOP+ResA.ResultadoEvaluacionCOM)/2)), 'n1') AS SumaCor
 , ResA.ResultadoEvaluacionEE  AS EE 
 , UPPER(adm.Parentesco) AS Parentesco
 FROM dbo.Aspirante asp
