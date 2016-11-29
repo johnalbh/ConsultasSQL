@@ -31,15 +31,16 @@ JOIN PERMISO AS PER ON
 	FUN.ID = PER.ID_FUNCIONALIDAD
 JOIN ROL AS ROL ON  
 	ROL.ID = PER.ID_ROL 
-WHERE FUN.Nombre like('Editar Estudiante%') AND ROL.Nombre like ('Administrador%')
+WHERE FUN.Nombre like('Pestaña Consejer%') --AND ROL.Nombre like ('Administrador%')
 		
 /********************************************************************
 --APROBAR PERMISOS PARA UN ROL
 ********************************************************************/
 DECLARE  @Id_Rol INT = 1
-		,@Id_Funcionalidad INT = 1182
+		,@Id_Funcionalidad INT = 3316
 		,@Approve_Permiso VARCHAR(2) = 'D'
-UPDATE PERMISO SET Permiso = @Approve_Permiso WHERE ID_ROL = @Id_Rol AND ID_Funcionalidad = @Id_Funcionalidad;
+		,@Nivel INT = 1
+UPDATE PERMISO SET Permiso = @Approve_Permiso, Nivel = @Nivel WHERE ID_ROL = @Id_Rol AND ID_Funcionalidad = @Id_Funcionalidad;
 
 /********************************************************************
 --DENEGAR PERMISOS PARA UN ROL
@@ -51,3 +52,6 @@ DECLARE  @Id_Rol INT = 1
 UPDATE PERMISO SET Permiso = @Denied_Permiso WHERE ID_ROL = @Id_Rol and ID_Funcionalidad = @Id_Funcionalidad;
 
 
+select * from permiso where Id_Funcionalidad = 3316
+
+select * from funcionalidad
